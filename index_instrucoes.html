@@ -1,0 +1,192 @@
+<title>Preparação Minicurso de R</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: coluna única de leitura, passos numerados porque a ordem de instalação importa */
+:root{
+  --bg:#f7f5ef; --surface:#ffffff; --fg:#1b2a3d; --muted:#5a6676; --line:#dcd8cc;
+  --accent:#e58a3c; --blue:#2e6fbf; --ok:#2f9e63; --code-bg:#1b2a3d; --code-fg:#f7f5ef; --warn-bg:#fdf1e4;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121b27; --surface:#1b2735; --fg:#ecebe5; --muted:#a3adba; --line:#2e3c4e;
+  --accent:#f0a061; --blue:#79a8e8; --ok:#5cd394; --code-bg:#0b121b; --code-fg:#ecebe5; --warn-bg:#2c2418; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121b27; --surface:#1b2735; --fg:#ecebe5; --muted:#a3adba; --line:#2e3c4e;
+  --accent:#f0a061; --blue:#79a8e8; --ok:#5cd394; --code-bg:#0b121b; --code-fg:#ecebe5; --warn-bg:#2c2418; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--sans)}
+.wrap{max-width:760px;margin:0 auto;padding-block:40px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:40px}
+header .tag{font:600 13px var(--mono);color:var(--accent);letter-spacing:.02em}
+h1{font-size:clamp(28px,5vw,40px);line-height:1.15;margin:8px 0 12px;text-wrap:balance}
+h2{font-size:22px;margin:0 0 12px;text-wrap:balance;display:flex;gap:12px;align-items:baseline}
+h2 .n{font:600 14px var(--mono);color:var(--surface);background:var(--fg);border-radius:4px;padding:2px 8px}
+h3{font-size:17px;margin:20px 0 6px}
+p{margin:0 0 12px} .lead{color:var(--muted);font-size:17px;max-width:62ch}
+.meta{display:flex;flex-wrap:wrap;gap:8px 24px;font-size:14px;color:var(--muted);margin-top:16px}
+.meta b{color:var(--fg)}
+a{color:var(--blue);text-underline-offset:2px} a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px 20px}
+.warn{background:var(--warn-bg);border-left:4px solid var(--accent);padding:14px 18px;border-radius:0 6px 6px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.grid .box{min-width:0}
+.k{font:600 12px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.v{font-size:18px;font-weight:600;margin-top:2px}
+table{border-collapse:collapse;width:100%;font-size:15px}
+.tw{overflow-x:auto}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 12px var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+td code,p code,li code{font:13.5px var(--mono);background:var(--surface);border:1px solid var(--line);padding:1px 5px;border-radius:4px}
+ol,ul{margin:0 0 12px;padding-left:22px} li{margin:4px 0}
+.code{position:relative;background:var(--code-bg);color:var(--code-fg);border-radius:8px;overflow-x:auto}
+.code pre{margin:0;padding:16px 18px;font:14px/1.55 var(--mono);white-space:pre}
+.code button{position:absolute;top:8px;right:8px;font:600 12px var(--sans);background:var(--accent);color:#1b2a3d;border:0;border-radius:4px;padding:5px 10px;cursor:pointer}
+.c{color:#8fa0b3}
+.ok{color:var(--ok);font-weight:600}
+.ref{font-size:15px;line-height:1.55}
+.btn{display:inline-block;background:var(--fg);color:var(--bg);text-decoration:none;font-weight:600;padding:10px 16px;border-radius:6px;margin:4px 8px 4px 0}
+.sub{margin:6px 0 0;color:var(--muted);font-size:14px}
+.info{display:grid;gap:12px;margin-top:20px;padding:16px 20px;background:var(--surface);border:1px solid var(--line);border-radius:8px}
+.iv{font-weight:500;overflow-wrap:anywhere}
+.mail{font-family:var(--mono);font-size:.92em;user-select:all}
+footer{font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="tag">&gt; minicurso_R(conservacao = TRUE)</div>
+  <h1>Prepare seu computador para o Minicurso: R for data analyses in conservation biology</h1>
+  <p class="lead">Uso do R para análises e representação gráfica. Siga os passos abaixo <b>antes do dia do curso</b>. A instalação leva cerca de 20 minutos e precisa de internet; no dia, não haverá tempo para instalar.</p>
+  <div class="info">
+    <div><div class="k">Data e horário</div><div class="iv">03/11/2026, às 14 horas · 4 horas de duração</div></div>
+    <div><div class="k">Local</div><div class="iv">Sala Alberto Pasqualini, 3º pavimento da Faculdade de Direito, UFRGS</div></div>
+    <div><div class="k">Professor</div><div class="iv">Wellington Ferreira Campos (UFVJM) · <span class="mail">wellington.campos@ufvjm.edu.br</span></div></div>
+  </div>
+</header>
+
+<section>
+  <h2><span class="n">1</span>O que você precisa ter</h2>
+  <div class="grid">
+    <div class="box"><div class="k">Sistema</div><div class="v">Windows 10 ou 11 (64 bits)</div><p class="sub">Linux Ubuntu 22+</p></div>
+    <div class="box"><div class="k">Memória RAM</div><div class="v">8 GB recomendado</div><p class="sub">Funciona com 4 GB, mais devagar</p></div>
+    <div class="box"><div class="k">Espaço livre</div><div class="v">3 GB em disco</div><p class="sub">R, RStudio e pacotes</p></div>
+    <div class="box"><div class="k">No dia</div><div class="v">Carregador</div><p class="sub">A bateria não aguenta 4 horas</p></div>
+  </div>
+  <div class="warn" style="margin-top:16px"><b>Sem notebook?</b> Não deixe de vir. Você pode acompanhar em dupla com um colega que tenha computador, e todo o código aparece projetado.</div>
+</section>
+
+<section>
+  <h2><span class="n">2</span>Instale o R 4.6.1</h2>
+  <p>O R é o motor que faz as contas. <b>Instale o R primeiro e o RStudio depois.</b> Versão do curso: <b>R 4.6.1</b> (versão estável atual, lançada em junho de 2026). Se você já tem R 4.5 ou mais novo, pode manter; versões 4.4 ou anteriores devem ser atualizadas.</p>
+  <div class="warn" style="margin-bottom:16px"><b>Atenção: atualize mesmo que você já tenha o R instalado.</b> O curso exige <b>R 4.5 ou mais novo</b> e <b>RStudio 2026 ou mais novo</b>. Versões antigas não instalam alguns pacotes do curso e são a causa mais comum de erro no dia. Para conferir sua versão, abra o RStudio e veja a primeira linha do Console (por exemplo, <code>R version 4.3.2</code> = precisa atualizar). Para atualizar, basta instalar a versão nova por cima seguindo os passos abaixo; os pacotes precisarão ser instalados de novo (passo 4).</div>
+  <div class="tw"><table>
+    <thead><tr><th>Sistema</th><th>Link</th><th>Qual arquivo baixar</th></tr></thead>
+    <tbody>
+      <tr><td><b>Windows</b></td><td><a href="https://cloud.r-project.org/bin/windows/base/" target="_blank" rel="noopener">cloud.r-project.org/bin/windows/base</a></td><td>Clique em <b>Download R-4.6.1 for Windows</b> (<code>R-4.6.1-win.exe</code>, ~90 MB)</td></tr>
+      <tr><td><b>Linux</b></td><td><a href="https://cloud.r-project.org/bin/linux/" target="_blank" rel="noopener">cloud.r-project.org/bin/linux</a></td><td>Siga as instruções da sua distribuição</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Como instalar</h3>
+  <ol>
+    <li>Abra o arquivo baixado com duplo clique.</li>
+    <li>No Windows, se aparecer "O Windows protegeu o computador", clique em <b>Mais informações → Executar assim mesmo</b>.</li>
+    <li>Aceite todas as opções padrão: clique em <b>Avançar</b> até o fim. Não mude a pasta de instalação.</li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="n">3</span>Instale o RStudio Desktop</h2>
+  <p>O RStudio é o painel onde vamos trabalhar: editor de scripts, console, gráficos e arquivos na mesma janela. Versão atual: <b>RStudio 2026.10.0</b> (gratuita).</p>
+  <a class="btn" href="https://docs.posit.co/ide/user/download.html" target="_blank" rel="noopener">Baixar RStudio Desktop</a>
+  <ol>
+    <li>Na página, o botão <b>Download RStudio Desktop</b> detecta seu sistema. Se não detectar, role até a tabela e escolha.</li>
+    <li>Windows: execute o instalador e aceite as opções padrão.</li>
+    <li>Abra o <b>RStudio</b> (não o "R" nem o "RGui"). Ele deve mostrar quatro painéis e, no Console, a linha <code>R version 4.6.1</code>.</li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="n">4</span>Instale os pacotes do curso</h2>
+  <p>Com o RStudio aberto e <b>conectado à internet</b>, copie o bloco abaixo, cole no painel <b>Console</b> (embaixo, à esquerda) e tecle <b>Enter</b>. Pode levar de 5 a 15 minutos; espere até o sinal <code>&gt;</code> voltar a aparecer.</p>
+  <div class="code"><button type="button" data-copy="pk">Copiar</button><pre id="pk">install.packages(c(
+  "tidyverse",      <span class="c"># organizar dados e gráficos (dplyr, ggplot2...)</span>
+  "readxl",         <span class="c"># importar planilhas do Excel</span>
+  "palmerpenguins", <span class="c"># os dados do curso</span>
+  "patchwork",      <span class="c"># juntar gráficos numa figura</span>
+  "multcompView",   <span class="c"># letras do teste de Tukey</span>
+  "performance",    <span class="c"># diagnóstico de modelos</span>
+  "see",            <span class="c"># gráficos do diagnóstico</span>
+  "ExpDes.pt"       <span class="c"># ANOVA em delineamentos experimentais</span>
+))</pre></div>
+  <ul style="margin-top:12px">
+    <li>Se perguntar <i>"Would you like to use a personal library instead?"</i>, responda <b>yes</b> (duas vezes, se perguntar de novo).</li>
+    <li>Se perguntar <i>"Do you want to install from sources the packages which need compilation?"</i>, responda <b>no</b>.</li>
+    <li>Mensagens em vermelho nem sempre são erro. O que importa é o teste do passo 5.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="n">5</span>Teste se deu tudo certo</h2>
+  <p>Cole este bloco no Console e tecle Enter.</p>
+  <div class="code"><button type="button" data-copy="tst">Copiar</button><pre id="tst">pacotes &lt;- c("tidyverse", "readxl", "palmerpenguins", "patchwork",
+             "multcompView", "performance", "see", "ExpDes.pt")
+R.version.string
+sapply(pacotes, requireNamespace, quietly = TRUE)
+library(palmerpenguins)
+library(ggplot2)
+ggplot(penguins, aes(flipper_length_mm, body_mass_g, colour = species)) +
+  geom_point()</pre></div>
+  <p style="margin-top:12px"><span class="ok">Funcionou</span> se: aparece <code>R version 4.6.1</code> (ou 4.5.x), todos os pacotes mostram <code>TRUE</code> e surge um gráfico colorido de pinguins no painel Plots. Não se preocupe com o aviso sobre linhas removidas: são dados ausentes, assunto do curso.</p>
+  <p>Apareceu algum <code>FALSE</code>? Rode de novo <code>install.packages("nome_do_pacote")</code> só para ele.</p>
+  <p>Se o problema continuar, envie um print da tela para <b class="mail">wellington.campos@ufvjm.edu.br</b> até <b>31/10</b>, para dar tempo de resolver antes do curso.</p>
+</section>
+
+<section>
+  <h2><span class="n">6</span>O artigo que vamos seguir</h2>
+  <p>Todo o curso usa um único caso de estudo: os dados de pinguins da Antártica do artigo abaixo. Vamos refazer, em R, a pergunta central dos autores: <b>machos e fêmeas diferem em tamanho, e essa diferença (o dimorfismo sexual) é igual nas três espécies?</b> A leitura prévia não é obrigatória, mas ler o resumo e olhar as figuras ajuda muito.</p>
+  <div class="box ref">
+    <p><b>Gorman KB, Williams TD, Fraser WR (2014).</b> Ecological sexual dimorphism and environmental variability within a community of Antarctic penguins (genus <i>Pygoscelis</i>). <i>PLOS ONE</i> 9(3): e90081.</p>
+    <p style="margin:0">Acesso aberto e gratuito · DOI <a href="https://doi.org/10.1371/journal.pone.0090081" target="_blank" rel="noopener">10.1371/journal.pone.0090081</a></p>
+  </div>
+  <div style="margin-top:12px"><a class="btn" href="https://doi.org/10.1371/journal.pone.0090081" target="_blank" rel="noopener">Ler o artigo</a></div>
+  <h3>Os dados no R</h3>
+  <p>Os dados do artigo foram reunidos no pacote <code>palmerpenguins</code>: 344 pinguins de 3 espécies (Adélie, Chinstrap e Gentoo) em 3 ilhas do Arquipélago Palmer, coletados entre 2007 e 2009 na Estação Palmer.</p>
+  <p class="ref" style="color:var(--muted)">Horst AM, Hill AP, Gorman KB (2020). palmerpenguins: Palmer Archipelago (Antarctica) penguin data. R package. DOI <a href="https://doi.org/10.5281/zenodo.3960218" target="_blank" rel="noopener">10.5281/zenodo.3960218</a> · <a href="https://allisonhorst.github.io/palmerpenguins/" target="_blank" rel="noopener">site do pacote</a></p>
+</section>
+
+<section>
+  <h2><span class="n">7</span>O que vamos fazer em 4 horas</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Bloco</th><th>Tema</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>A filosofia do R: por que a linguagem pensa como um estatístico</td></tr>
+      <tr><td>2</td><td>Primeiro contato: RStudio, projetos e os pinguins</td></tr>
+      <tr><td>3</td><td>Dados no centro: importar, limpar e organizar com o tidyverse</td></tr>
+      <tr><td>4</td><td>Explorar e modelar com fórmulas</td></tr>
+      <tr><td>5</td><td>Gráficos com ggplot2: da exploração à figura do artigo</td></tr>
+    </tbody>
+  </table></div>
+  <p style="margin-top:12px;color:var(--muted);font-size:15px">Nível básico a intermediário: quem nunca usou R consegue acompanhar. Os scripts completos serão entregues ao final.</p>
+</section>
+
+<section>
+  <h2><span class="n">✓</span>Checklist final</h2>
+  <ul style="list-style:none;padding:0">
+    <li>☐ R 4.6.1 instalado</li>
+    <li>☐ RStudio 2026.10.0 instalado e abrindo</li>
+    <li>☐ Pacotes instalados e teste do passo 5 com todos <code>TRUE</code> e o gráfico</li>
+    <li>☐ Carregador do notebook na mochila</li>
+  </ul>
+</section>
+
+<footer>Prof. Wellington Ferreira Campos · UFVJM · wellington.campos@ufvjm.edu.br</footer>
+</div>
+
+<script>
+document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',()=>{
+  const t=document.getElementById(b.dataset.copy).innerText;
+  const done=()=>{b.textContent='Copiado';setTimeout(()=>b.textContent='Copiar',1500)};
+  try{navigator.clipboard.writeText(t).then(done,()=>{sel(b);});}catch(e){sel(b);}
+}));
+function sel(b){const r=document.createRange();r.selectNodeContents(document.getElementById(b.dataset.copy));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Ctrl+C';}
+</script>
